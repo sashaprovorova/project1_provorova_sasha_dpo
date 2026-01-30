@@ -28,6 +28,10 @@ def move_player(game_state, direction):
         print("Нельзя пойти в этом направлении.")
 
 def take_item(game_state, item_name): 
+    if item_name == "treasure_chest":
+        print("Вы не можете поднять сундук, он слишком тяжелый.")
+        return
+    
     current_room = game_state["current_room"]
     items = ROOMS[current_room]["items"]
 
