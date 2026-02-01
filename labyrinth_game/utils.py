@@ -1,6 +1,6 @@
 import math
 
-from labyrinth_game.constants import ROOMS
+from labyrinth_game.constants import ANSWER_ALIASES, PUZZLE_REWARDS, ROOMS
 
 
 def describe_current_room(game_state): 
@@ -36,16 +36,22 @@ def solve_puzzle(game_state):
     print(question)
 
     user_answer = input("Ваш ответ: ").strip().lower()
+    accepted_answers = ANSWER_ALIASES.get(correct_answer, {correct_answer})
 
-    if user_answer == correct_answer:
+    if user_answer in accepted_answers:
         print("Верно! Загадка решена.")
         room_info["puzzle"] = None 
 
-        if "treasure_key" not in game_state["player_inventory"]:
-            game_state["player_inventory"].append("treasure_key")
-            print("Награда получена: treasure_key")
+        reward = PUZZLE_REWARDS.get(current_room)
+        if reward and reward not in game_state["player_inventory"]:
+            game_state["player_inventory"].append(reward)
+            print(f"Награда получена: {reward}")
+        return
+    elif current_room == "trap_room":
+        trigger_trap(game_state)
     else:
         print("Неверно. Попробуйте снова.")
+    
 
 def attempt_open_treasure(game_state): 
     current_room = game_state["current_room"]
@@ -77,8 +83,9 @@ def attempt_open_treasure(game_state):
     _, correct_code = room_info["puzzle"]
     user_code = input("Введите код: ").strip().lower()
     correct_code = str(correct_code).strip().lower()
+    accepted_codes = ANSWER_ALIASES.get(correct_code, {correct_code})
 
-    if user_code == correct_code:
+    if user_code in accepted_codes:
         print("Код верный! Замок открыт.")
         room_info["puzzle"] = None
         if "treasure_chest" in items:
@@ -88,17 +95,10 @@ def attempt_open_treasure(game_state):
     else:
         print("Неверный код.")
 
-
-def show_help():
+def show_help(commands):
     print("\nДоступные команды:")
-    print("  go <direction>  - перейти в направлении (north/south/east/west)")
-    print("  look            - осмотреть текущую комнату")
-    print("  take <item>     - поднять предмет")
-    print("  use <item>      - использовать предмет из инвентаря")
-    print("  inventory       - показать инвентарь")
-    print("  solve           - попытаться решить загадку в комнате")
-    print("  quit            - выйти из игры")
-    print("  help            - показать это сообщение")
+    for cmd, desc in commands.items(): 
+        print(f"  {cmd:<16} {desc}")
 
 def pseudo_random(seed, modulo): 
     if modulo <= 0:

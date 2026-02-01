@@ -63,3 +63,32 @@ ROOMS = {
           'puzzle': None
     }
 }
+
+
+COMMANDS = {
+    "go <direction>": "перейти в направлении (north/south/east/west)",
+    "look": "осмотреть текущую комнату", 
+    "take <item>": "поднять предмет", 
+    "use <item>": "использовать предмет из инвентаря", 
+    "inventory": "показать инвентарь", 
+    "solve": "попытаться решить загадку в комнате", 
+    "quit": "выйти из игры", 
+    "help": "показать это сообщение"
+}
+
+PUZZLE_REWARDS = {
+    "hall": None,
+    "library": "treasure_key",
+    "trap_room": None,
+    "chamber": None,
+    "treasure_room": None,
+}
+
+ANSWER_ALIASES = {
+    "10": {"10", "десять"},
+    "1": {"1", "один", "одна", "одно"},
+    "шаг шаг шаг": {"шаг шаг шаг", "шаг, шаг, шаг", "шаг-шаг-шаг"},
+    "резонанс": {"резонанс"},
+}
+
+DIRECTIONS = {"north", "south", "east", "west"}

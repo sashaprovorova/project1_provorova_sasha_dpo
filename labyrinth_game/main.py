@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from labyrinth_game.constants import COMMANDS, DIRECTIONS
 from labyrinth_game.player_actions import (
     get_input,
     move_player,
@@ -19,6 +20,10 @@ def process_command(game_state, command):
     instruction = parts[0].lower()
     arg = parts[1] if len(parts) > 1 else ""
 
+    if instruction in DIRECTIONS:
+        move_player(game_state, instruction)
+        return
+    
     match instruction:
         case "look":
             describe_current_room(game_state)
@@ -50,7 +55,7 @@ def process_command(game_state, command):
                 solve_puzzle(game_state)
 
         case "help":
-            show_help()
+            show_help(COMMANDS)
 
         case "quit" | "exit":
             game_state["game_over"] = True
