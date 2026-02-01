@@ -16,6 +16,8 @@ from labyrinth_game.utils import (
 
 
 def process_command(game_state, command): 
+    """ Разбирает команду игрока и выполняет соответствующее действие. """
+    
     parts = command.split()
     instruction = parts[0].lower()
     arg = parts[1] if len(parts) > 1 else ""
@@ -64,7 +66,10 @@ def process_command(game_state, command):
         case _:
             print("Неизвестная команда.")
 
-def main() -> None:
+def main():
+    """ Запускает игру: создаёт состояние, показывает стартовую 
+    комнату и запускает игровой цикл. """
+    
     game_state = {
         'player_inventory': [],
         'current_room': 'entrance', 

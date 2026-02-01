@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "project1_provorova_sasha_dpo"
 version = "0.1.0"
-description = ""
+description = "Console text adventure game: Treasure Labyrinth"
 authors = ["Aleksandra Provorova <sashaprovora@gmail.com>"]
 packages = [
     { include = "labyrinth_game" },

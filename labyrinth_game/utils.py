@@ -1,9 +1,18 @@
 import math
 
-from labyrinth_game.constants import ANSWER_ALIASES, PUZZLE_REWARDS, ROOMS
+from labyrinth_game.constants import (
+    ANSWER_ALIASES,
+    EVENT_PROBABILITY,
+    EVENT_TYPES,
+    PUZZLE_REWARDS,
+    ROOMS,
+    TRAP_DEFEAT_THRESHOLD,
+)
 
 
 def describe_current_room(game_state): 
+    """ Печатает описание текущей комнаты, доступные выходы, 
+    предметы и наличие загадки. """
     current_room = game_state['current_room']
     room_info = ROOMS[current_room]
 
@@ -22,6 +31,8 @@ def describe_current_room(game_state):
         print("Кажется, здесь есть загадка (используйте команду solve).")   
 
 def solve_puzzle(game_state): 
+    """ Показывает загадку комнаты и проверяет ответ с учётом
+      альтернативных вариантов. """
     current_room = game_state["current_room"]
     room_info = ROOMS[current_room]
 
@@ -54,6 +65,8 @@ def solve_puzzle(game_state):
     
 
 def attempt_open_treasure(game_state): 
+    """ Пытается открыть сундук в комнате сокровищ ключом 
+     или кодом; при успехе завершает игру. """
     current_room = game_state["current_room"]
 
     if current_room != "treasure_room":
@@ -96,11 +109,15 @@ def attempt_open_treasure(game_state):
         print("Неверный код.")
 
 def show_help(commands):
+    """ Выводит список доступных команд и их описание
+      в красивом формате. """
     print("\nДоступные команды:")
     for cmd, desc in commands.items(): 
         print(f"  {cmd:<16} {desc}")
 
 def pseudo_random(seed, modulo): 
+    """ Возвращает псевдослучайное число в диапазоне 
+    [0, modulo) на основе seed. """
     if modulo <= 0:
         return 0
 
@@ -109,6 +126,9 @@ def pseudo_random(seed, modulo):
     return int(div * modulo)
 
 def trigger_trap(game_state): 
+    """ Активирует ловушку: игрок теряет предмет
+      или может проиграть. """
+    
     print("Ловушка активирована! Пол стал дрожать...")
 
     inventory = game_state["player_inventory"]
@@ -120,21 +140,24 @@ def trigger_trap(game_state):
         print(f"Вы потеряли предмет: {lost_item}")
         return
 
-    roll = pseudo_random(steps, 10)  
-    if roll < 3:
+    roll = pseudo_random(steps, EVENT_PROBABILITY)  
+    if roll < TRAP_DEFEAT_THRESHOLD:
         print("Вы провалились и проиграли.")
         game_state["game_over"] = True
     else:
         print("Вам удалось удержаться. Вы уцелели.")
 
 def random_event(game_state): 
+    """ Иногда запускает случайное событие: монетка, 
+    шорох или ловушка в trap_room. """
+    
     steps = game_state["steps_taken"]
 
-    happens = pseudo_random(steps, 10)
+    happens = pseudo_random(steps, EVENT_PROBABILITY)
     if happens != 0:
         return
 
-    event_type = pseudo_random(steps + 1, 3) 
+    event_type = pseudo_random(steps + 1, EVENT_TYPES) 
 
     current_room = game_state["current_room"]
     room_info = ROOMS[current_room]

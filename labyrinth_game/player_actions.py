@@ -3,6 +3,8 @@ from labyrinth_game.utils import describe_current_room, random_event
 
 
 def show_inventory(game_state): 
+    """ Печатает содержимое инвентаря игрока. """
+    
     player_inventory = game_state['player_inventory']
     if player_inventory: 
         print(f"Инвентарь: {player_inventory}")
@@ -10,6 +12,9 @@ def show_inventory(game_state):
         print("Инвентарь пуст")
 
 def get_input(prompt="> "):
+    """ Безопасно читает ввод пользователя, 
+    при Ctrl+C/Ctrl+D возвращает quit. """
+    
     try:
         return input(prompt)
     except (KeyboardInterrupt, EOFError):
@@ -17,6 +22,9 @@ def get_input(prompt="> "):
         return "quit"
   
 def move_player(game_state, direction): 
+    """ Перемещает игрока по направлению, проверяя доступность 
+    выхода и условия входа в treasure_room. """
+    
     current_room = game_state["current_room"]
     exits = ROOMS[current_room]["exits"]
 
@@ -40,6 +48,8 @@ def move_player(game_state, direction):
         
 
 def take_item(game_state, item_name): 
+    """ Поднимает предмет из комнаты в инвентарь, если он доступен. """
+    
     if item_name == "treasure_chest":
         print("Вы не можете поднять сундук, он слишком тяжелый.")
         return
@@ -55,6 +65,9 @@ def take_item(game_state, item_name):
         print("Такого предмета здесь нет.")
 
 def use_item(game_state, item_name): 
+    """ Использует предмет из инвентаря и применяет 
+    его эффект (если он предусмотрен). """
+    
     inventory = game_state["player_inventory"]
 
     if item_name not in inventory:

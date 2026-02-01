@@ -92,3 +92,7 @@ ANSWER_ALIASES = {
 }
 
 DIRECTIONS = {"north", "south", "east", "west"}
+
+EVENT_PROBABILITY = 10
+EVENT_TYPES = 3
+TRAP_DEFEAT_THRESHOLD = 3
